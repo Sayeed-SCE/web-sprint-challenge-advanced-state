@@ -1,51 +1,99 @@
 // ❗ You don't need to add extra reducers to achieve MVP
 import { combineReducers } from 'redux';
 import * as types from './action-types';
+import { LOAD_QUIZ, LOADING, LOAD_ANSWER1, LOAD_ANSWER2, SELECTED, SET_MESSAGE, SET_FORM, RESET_FORM, MOVE_CLOCKWISE, MOVE_COUNTER, SELECTED2 } from "./action-creators";
+
 
 const initialWheelState = 0
 function wheel(state = initialWheelState, action) {
   switch(action.type){
-    case types.MOVE_CLOCKWISE:{
-      return initialWheelState + action.payload
-    }
-    default:
-      return state;
-    }
+    case MOVE_CLOCKWISE:
+      return state === 5 ? state - 5 : state + 1 
+    
+    case MOVE_COUNTER:
+      return state === 0 ? state + 5 : state - 1;
+  default:
+    return state;
+}
 }
 
-const initialQuizState = null
+const initialQuizState = [];
 function quiz(state = initialQuizState, action) {
   switch(action.type){
-    case types.SET_QUIZ_INTO_STATE: {
-      return initialQuizState + action.payload
-    }
+    case LOAD_QUIZ:
+      return action.payload
+
     default: 
     return state;
   }
   
 }
 
-const initialSelectedAnswerState = null
+const initLoadingState = null;
+
+const loadingReducer = (state = initLoadingState, action) => {
+  switch(action.type){
+    case LOADING:
+      return !state
+    default:
+      return state;
+  }
+}
+
+
+const initAnswerData = [];
+
+const answerReducer = (state = initAnswerData, action) => {
+  switch(action.type){
+    case LOAD_ANSWER1:
+      return action.payload
+    
+    default:
+      return state;
+  }
+}
+const initAnswerData2 = [];
+
+const answerReducer2 = (state = initAnswerData2, action) => {
+  switch(action.type){
+  
+    case LOAD_ANSWER2:
+      return action.payload
+    default:
+      return state;
+  }
+}
+
+const initialSelectedAnswerState = "f"
 function selectedAnswer(state = initialSelectedAnswerState, action) {
   switch(action.type){
-    case types.SET_SELECTED_ANSWER: {
-      return initialSelectedAnswerState + action.payload
-    }
+    case SELECTED:
+      return !state
     default:
       return state;
   }
   
+}
+
+const initialSelectedAnswerState2 = false
+
+function selectedAnswer2(state = initialSelectedAnswerState2, action) {
+  switch(action.type){
+    case SELECTED2:
+      return state === true ? true : true
+    default:
+      return state
+  }
 }
 
 const initialMessageState = ''
-function infoMessage(state = initialMessageState, action) {
+function setMessage(state = initialMessageState, action) {
   switch(action.type){
-    case types.SET_INFO_MESSAGE: {
-      return initialMessageState + action.payload
-    }
-    default: 
-    return state;
+    case SET_MESSAGE:
+      return action.payload
   }
+  return state
+   
   
 }
 
@@ -56,17 +104,11 @@ const initialFormState = {
 }
 function form(state = initialFormState, action) {
   switch(action.type){
-    case types.INPUT_CHANGE:{
-      return initialFormState + action.payload
-    } 
-    case types.RESET_FORM:{
-      return initialFormState
-    }
-    default:
-      return state;
-    
+    case SET_FORM:
+      return action.payload
+    case RESET_FORM:
+      return action.payload
   }
+  return state
 }
-
-
-export default combineReducers({ wheel, quiz, selectedAnswer, infoMessage, form })
+export default combineReducers({ wheel, quiz, selectedAnswer, selectedAnswer2, setMessage, form, loadingReducer, answerReducer, answerReducer2 });
